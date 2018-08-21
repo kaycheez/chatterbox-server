@@ -3,7 +3,7 @@ var app = {
 
   //TODO: The current 'handleUsernameClick' function just toggles the class 'friend'
   //to all messages sent by the user
-  server: 'http://parse.CAMPUS.hackreactor.com/chatterbox/classes/messages',
+  server: 'http://127.0.0.1:3000/classes/message',
   username: 'anonymous',
   roomname: 'lobby',
   lastMessageId: 0,
@@ -51,9 +51,9 @@ var app = {
         // Trigger a fetch to update the messages, pass true to animate
         app.fetch();
       },
-      error: function (error) {
-        console.error('chatterbox: Failed to send message', error);
-      }
+      // error: function (error) {
+      //   console.error('chatterbox: Failed to send message', error);
+      // }
     });
   },
 
@@ -61,7 +61,6 @@ var app = {
     $.ajax({
       url: app.server,
       type: 'GET',
-      data: { order: '-createdAt' },
       success: function(data) {
         // Don't bother if we have nothing to work with
         if (!data.results || !data.results.length) { return; }
@@ -73,16 +72,14 @@ var app = {
         var mostRecentMessage = data.results[data.results.length - 1];
 
         // Only bother updating the DOM if we have a new message
-        if (mostRecentMessage.objectId !== app.lastMessageId) {
-          // Update the UI with the fetched rooms
-          app.renderRoomList(data.results);
 
-          // Update the UI with the fetched messages
-          app.renderMessages(data.results, animate);
+        // Update the UI with the fetched rooms
+        app.renderRoomList(data.results);
 
-          // Store the ID of the most recent message
-          app.lastMessageId = mostRecentMessage.objectId;
-        }
+        // Update the UI with the fetched messages
+        app.renderMessages(data.results, animate);
+
+        // Store the ID of the most recent message
       },
       error: function(error) {
         console.error('chatterbox: Failed to fetch messages', error);
@@ -221,16 +218,16 @@ var app = {
     app.send(message);
 
     // Stop the form from submitting
-    event.preventDefault();
+    // event.preventDefault();
   },
 
   startSpinner: function() {
     $('.spinner img').show();
-    $('form input[type=submit]').attr('disabled', 'true');
+    // $('form input[type=submit]').attr('disabled', 'true');
   },
 
   stopSpinner: function() {
     $('.spinner img').fadeOut('fast');
-    $('form input[type=submit]').attr('disabled', null);
+    // $('form input[type=submit]').attr('disabled', null);
   }
 };
